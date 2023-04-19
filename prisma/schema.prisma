@@ -9,3 +9,39 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+model Institution {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  password_hash String
+  phone         String
+  created_at    DateTime @default(now())
+
+  role Role @default(MEMBER)
+
+  address    Address @relation(fields: [address_id], references: [id])
+  address_id String
+
+  @@index([id])
+  @@map("institutions")
+}
+
+model Address {
+  id           String        @id @default(uuid())
+  zipcode      String
+  street       String
+  streetNumber String
+  state        String
+  city         String
+  latitude     Float
+  longitude    Float
+  Institution  Institution[]
+
+  @@map("adresses")
+}
