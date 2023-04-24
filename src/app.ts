@@ -4,6 +4,8 @@ import fastify from 'fastify'
 import { ZodError } from 'zod'
 
 import { env } from './config/env'
+import { institutionsRoutes } from './http/controllers/institutions/routes'
+import { petsRoutes } from './http/controllers/pet/routes'
 
 export const app = fastify()
 
@@ -19,6 +21,8 @@ app.register(fastifyJwt, {
 })
 
 app.register(fastifyCookie)
+app.register(institutionsRoutes)
+app.register(petsRoutes)
 
 app.setErrorHandler((error, request, reply) => {
   if (error instanceof ZodError) {
