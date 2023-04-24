@@ -27,6 +27,7 @@ model Institution {
 
   address    Address @relation(fields: [address_id], references: [id])
   address_id String
+  Pet        Pet[]
 
   @@index([id])
   @@map("institutions")
@@ -44,4 +45,51 @@ model Address {
   Institution  Institution[]
 
   @@map("adresses")
+}
+
+enum Sex {
+  MALE
+  FEMALE
+}
+
+enum Level {
+  SMALL
+  MEDIUM
+  HIGH
+  EXTRA_HIGH
+}
+
+model Pet {
+  id                    String @id @default(uuid())
+  name                  String
+  history               String
+  species               String
+  sex                   Sex
+  age                   Int
+  energy                Level
+  size                  Level
+  level_of_independence Level
+  ambient               Level
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  institution    Institution  @relation(fields: [institution_id], references: [id])
+  institution_id String
+  PetGallery     PetGallery[]
+
+  @@map("pets")
+}
+
+model PetGallery {
+  id    String @id @default(uuid())
+  photo String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  pet    Pet    @relation(fields: [pet_id], references: [id])
+  pet_id String
+
+  @@map("pets_galleries")
 }
